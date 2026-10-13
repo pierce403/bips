@@ -1,0 +1,26 @@
+name: BIP-158 Go checks
+
+on:
+  pull_request:
+    paths:
+      - 'bip-0158/**'
+      - '.github/workflows/bip158-go.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bip-0158
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: bip-0158/go.mod
+          cache-dependency-path: bip-0158/go.sum
+      - run: go test ./...
+      - run: go vet ./...
+      - run: go mod verify
